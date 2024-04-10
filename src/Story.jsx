@@ -11,6 +11,9 @@ import 'swiper/swiper-bundle.css';
 import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
 SwiperCore.use([EffectCoverflow]);
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
@@ -163,6 +166,9 @@ export default function Story() {
   function handleSubmit(e){
     const random = ((Math.random() * 4))
     e.preventDefault()
+    toast.success('Story Published', {
+      position: 'top-center'
+    });
     const Data ={
       subject: subject,
       description: describe,
@@ -551,6 +557,7 @@ export default function Story() {
               <button type='submit' className='submit-btn' onClick={handleSubmit}>
                   PUBLISH YOUR STORY
               </button>
+              <ToastContainer />
             </div>}
         </form>
 
@@ -564,6 +571,17 @@ export default function Story() {
             <div className='looking'>
               <div className='choose'>
                 <label htmlFor='choose'><h3>What are you looking for?</h3></label>
+                <div className='filter'>
+                  <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
+                  <div className='flex-filter'>
+                    <h2 className='filter-heading'>Sort: 
+                      <span onClick={handleflip}>
+                        {flipped ? `Newest to Oldest` : `Oldest to Newest`}
+                      </span>
+                    </h2>
+                <CgArrowsExchangeAltV  className='filterarrow' onClick={handleflip}/>
+              </div>
+          </div>
                 <input
                     type="text"
                     id='choose'
@@ -573,6 +591,7 @@ export default function Story() {
                     onChange={handleSearch2} required/>
                 <BiChevronDown className='btn-2' onClick={handleClick2}/>
               </div>
+              
               
             
               {(show4) ? (
@@ -605,17 +624,7 @@ export default function Story() {
             </div>          
           </div>
 
-          <div className='filter'>
-            <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
-            <div className='flex-filter'>
-              <h2 className='filter-heading'>Sort: 
-                <span onClick={handleflip}>
-                  {flipped ? `Newest to Oldest` : `Oldest to Newest`}
-                  </span>
-              </h2>
-              <CgArrowsExchangeAltV  className='filterarrow' onClick={handleflip}/>
-            </div>
-          </div>
+          
           
           { windowWidth > 425 ? <div>
             {selectedValue &&  (

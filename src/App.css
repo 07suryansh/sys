@@ -125,6 +125,7 @@ body,html{
   gap: 5px;
   align-items: center;
   list-style-type: none;
+  flex-wrap: wrap;
 }
 
 .list-items>li{
@@ -391,6 +392,7 @@ textarea{
   align-items: center;
   justify-content: center;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .section-2-head{
