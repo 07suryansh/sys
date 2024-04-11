@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useRef, useState} from 'react'
 import { AiOutlineSearch } from "react-icons/ai"
 import { BiChevronDown } from "react-icons/bi"
 import { BsPen, BsArrowLeft } from "react-icons/bs"
@@ -10,10 +10,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
 SwiperCore.use([EffectCoverflow]);
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
@@ -63,7 +61,23 @@ export default function Story() {
   const [reveal, setReveal] = useState({})
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  
+ const dropdownRef=useRef(null)
 
+ useEffect(() => {
+  const checkIfClickedOutside = e => {
+    if (show4 && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+
+      setShow4(false)
+    }
+  }
+
+  document.addEventListener("click", checkIfClickedOutside)
+
+  return () => {
+    document.removeEventListener("click", checkIfClickedOutside)
+  }
+}, [show4])
 
   useEffect(() => {
     onValue(cat, function(snapshot){
@@ -120,6 +134,7 @@ export default function Story() {
   }
   
   function handleSearch2(e){
+    console.log("values enter ")
     setSearch(e.target.value)
     setMenu(false)
     setShow3(true)
@@ -220,7 +235,8 @@ export default function Story() {
 
   function handleClick(){
     setShow3(prev => !prev)
-    setShow4(false)
+   
+    setShow4((prev)=>!prev)
   }
 
   function handleClick2(){
@@ -572,17 +588,18 @@ export default function Story() {
               <div className='choose'>
                 <label htmlFor='choose'><h3>What are you looking for?</h3></label>
                 <div className='filter'>
-                  <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
-                  <div className='flex-filter'>
-                    <h2 className='filter-heading'>Sort: 
-                      <span onClick={handleflip}>
-                        {flipped ? `Newest to Oldest` : `Oldest to Newest`}
-                      </span>
-                    </h2>
-                <CgArrowsExchangeAltV  className='filterarrow' onClick={handleflip}/>
-              </div>
-          </div>
+                   <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
+                   <div className='flex-filter'>
+                     <h2 className='filter-heading'>Sort: 
+                       <span onClick={handleflip}>
+                         {flipped ? `Newest to Oldest` : `Oldest to Newest`}
+                       </span>
+                     </h2>
+                 <CgArrowsExchangeAltV  className='filterarrow' onClick={handleflip}/>
+               </div>
+           </div>
                 <input
+                    ref={dropdownRef}
                     type="text"
                     id='choose'
                     placeholder="Browse a Category"
@@ -591,7 +608,6 @@ export default function Story() {
                     onChange={handleSearch2} required/>
                 <BiChevronDown className='btn-2' onClick={handleClick2}/>
               </div>
-              
               
             
               {(show4) ? (
@@ -623,8 +639,6 @@ export default function Story() {
                 )}
             </div>          
           </div>
-
-          
           
           { windowWidth > 425 ? <div>
             {selectedValue &&  (
