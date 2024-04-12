@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 import { FaStar } from "react-icons/fa";
+import { FaRegStar } from "react-icons/fa";
 
 const appSetting = {
   databaseURL: "https://story-ef71b-default-rtdb.firebaseio.com/"
@@ -31,7 +32,7 @@ let initialCategories = ['FIGMA', 'FOOD', 'ENGINEERING', 'CINEMA', 'JOURNALISM']
 
 export default function Story() {
 
-  const [starClick,setStarClick]=useState('star-icon-unclicked');
+  const [starClick,setStarClick]=useState({});
 
   const [swiper, setSwiper] = useState(null);
 
@@ -101,14 +102,12 @@ export default function Story() {
     }
   }, [randomCat])
 
-  function handleStar(){
-    if(starClick==='star-icon-unclicked'){
-      setStarClick('star-icon-clicked');
-    }
-    else{
-      setStarClick('star-icon-unclicked');
-    }
-  }
+  function handleStar  ()  {
+    setStarClick((prevState) => ({
+      ...prevState,
+      [search]: !prevState[search],
+    }));
+  };
 
 
     function getCurrentDateTime(){
@@ -608,7 +607,14 @@ export default function Story() {
               <div className='choose'>
                 <label htmlFor='choose'><h3>What are you looking for?</h3></label>
                 <div className='filter'>
-                <FaStar className={starClick} onClick={handleStar}/>
+                <span onClick={handleStar} style={{margin:"0px 10px",cursor:"pointer"}}>
+              
+              {starClick[search]?
+              <FaStar fill='#FFC436' size={40}/>
+              :<FaRegStar fill='#d6d6d6' size={40}/>}
+            
+            
+              </span>
                    <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
                    <div className='flex-filter'>
                      <h2 className='filter-heading'>Sort: 
