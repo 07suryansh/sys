@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { FaStar } from "react-icons/fa";
 
 const appSetting = {
   databaseURL: "https://story-ef71b-default-rtdb.firebaseio.com/"
@@ -29,6 +30,9 @@ const cat = ref(database, 'Category')
 let initialCategories = ['FIGMA', 'FOOD', 'ENGINEERING', 'CINEMA', 'JOURNALISM']
 
 export default function Story() {
+
+  const [starClick,setStarClick]=useState('star-icon-unclicked');
+
   const [swiper, setSwiper] = useState(null);
 
   const [subject, setSubject] = useState('')
@@ -96,6 +100,15 @@ export default function Story() {
       setCheck(randomCat[random])
     }
   }, [randomCat])
+
+  function handleStar(){
+    if(starClick==='star-icon-unclicked'){
+      setStarClick('star-icon-clicked');
+    }
+    else{
+      setStarClick('star-icon-unclicked');
+    }
+  }
 
 
     function getCurrentDateTime(){
@@ -392,6 +405,10 @@ export default function Story() {
           setStories(Object.entries(snapshot.val()).length)
           setMappable(Object.entries(snapshot.val()))
         }
+        else{
+          setStories(0)
+          setMappable([])
+        }
       })      
     }
     setReveal({})
@@ -462,6 +479,9 @@ export default function Story() {
   }
 
   function sorted(mappable){
+    if(mappable?.length===0){
+      return <h4>NO STORY FOUND</h4>
+    }
     const sortedMappable = mappable.sort((a, b) => {
       const dateA = new Date(formattedDate2(Object.values(a[1])[4]))
       const dateB = new Date(formattedDate2(Object.values(b[1])[4]))
@@ -582,12 +602,13 @@ export default function Story() {
         <section className='section-2'>
 
           <div className='section-2-head'>
-            <h1>Read their stories</h1>
+            <h1>Read stories on {search}</h1>
 
             <div className='looking'>
               <div className='choose'>
                 <label htmlFor='choose'><h3>What are you looking for?</h3></label>
                 <div className='filter'>
+                <FaStar className={starClick} onClick={handleStar}/>
                    <h1 className='total-story'><span>{stories === 1 ? `${stories} story` : stories === 0 ? `0 story` : `${stories} stories`}</span> for you to read</h1>
                    <div className='flex-filter'>
                      <h2 className='filter-heading'>Sort: 
@@ -612,7 +633,7 @@ export default function Story() {
             
               {(show4) ? (
                 <ul className='search-list search-list-2'>
-                {initialCategories.map(category => (
+                {randomCat?.map(category => (
                   <li key={category} onClick={() => handleCategorySelect2(category)}>
                     {category}
                     </li>
