@@ -8,9 +8,9 @@ import { Category } from "./Category"
 
 function App(){
   const navigate = useNavigate();
-  // useEffect(()=>{
-  //   navigate('/story');
-  // },[])
+  useEffect(()=>{
+    navigate('/story');
+  },[])
   return (
     <div className="header">
       <Navbar/>
