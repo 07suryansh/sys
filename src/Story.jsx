@@ -234,7 +234,7 @@ export default function Story() {
 
 
   function handleClick(){
-    setShow3(prev => !prev)
+    // setShow3(prev => !prev)
    
     setShow4((prev)=>!prev)
   }

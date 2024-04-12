@@ -1,5 +1,6 @@
 *{
   box-sizing: border-box;
+  background-color: aqua;
 }
 
 @font-face {
@@ -614,8 +615,12 @@ textarea{
     /* margin-top: 0; */
     width: 300px;
     font-size: 2rem;
+    
   }
-
+  .section-2-head{
+    display: flex;
+    flex-direction: column;
+  }
 
   
 
@@ -772,6 +777,7 @@ textarea{
 
   .story-section{
     flex-direction: column;
+    flex-wrap: wrap;
   }
 
   .section-1{
